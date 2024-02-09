@@ -4,7 +4,13 @@ import { Service } from "../services/service";
 import { CreateUser, UpdateUser } from "../models/User";
 
 const router: Router = Router();
-const userStrategy = new UserStrategy();
+const userStrategy = new UserStrategy({
+    user: 'cua',
+    password: '',
+    port: 1234,
+    host: '',
+    database: '',
+});
 const service = new Service(userStrategy);
 
 router.get('/', async (_, res) => {
