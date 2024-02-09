@@ -14,7 +14,7 @@ const cuaStrategy = new CuaStrategy({
 });
 const service = new Service(cuaStrategy);
 
-router.get('/', async (req, res) => {
+router.get('/', async (_, res) => {
     try {
         const data = await service.Get();
         res.status(200).json(data);

@@ -13,14 +13,20 @@ export default class CuaStrategy implements ServiceStrategy {
 
     async Get() {
         try {
-            const data = this.db.dbConn.query('SELECT * FROM cuas');
+            const data = await this.db.dbConn.query('SELECT * FROM cuas');
+            return data;
         } catch(err) {
             throw new Error(`Error en la consulta: ${err}`);
         }
     }
 
     async GetById(id: number) {
-        
+        try {
+            const data = await this.db.dbConn.query('SELECT * FROM cuas WHERE id = ?', [ id] );
+            return data;
+        } catch(err) {
+            throw new Error(`Error en la consulta: ${err}`);
+        }
     }
 
     async Insert(obj: CreateCua | CreateUser) {
