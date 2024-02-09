@@ -1,8 +1,9 @@
 import { Client } from 'pg';
 import { BaseDatabase, DatabaseFactory } from './database.factory';
+import { ConnObj } from '../models/ConnObj';
 
 class Postgres implements BaseDatabase {
-    constructor(private connObj: any) {}
+    constructor(private connObj: ConnObj) {}
 
     ConnectDB(): Client {
         return new Client(this.connObj);
@@ -10,7 +11,7 @@ class Postgres implements BaseDatabase {
 }
 
 export class PostgresFactory implements DatabaseFactory {
-    makeDatabase(connObj: any): BaseDatabase {
+    makeDatabase(connObj: ConnObj): BaseDatabase {
         return new Postgres(connObj);
     }
 }

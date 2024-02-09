@@ -1,10 +1,9 @@
-import { Client } from 'pg';
-import { Connection } from 'mysql';
+import { ConnObj } from '../models/ConnObj';
 
 export interface BaseDatabase {
-    ConnectDB(): Client | Connection;
+    ConnectDB(): any;
 }
 
 export interface DatabaseFactory {
-    makeDatabase(connObj: any): BaseDatabase;
+    makeDatabase(connObj: ConnObj): BaseDatabase;
 }

@@ -1,8 +1,9 @@
 import { Connection, createConnection } from "mysql";
 import { BaseDatabase, DatabaseFactory } from "./database.factory";
+import { ConnObj } from "../models/ConnObj";
 
 class MySql implements BaseDatabase {
-    constructor(private connObj: any) {}
+    constructor(private connObj: ConnObj) {}
 
     ConnectDB(): Connection {
         return createConnection(this.connObj);
@@ -10,7 +11,7 @@ class MySql implements BaseDatabase {
 }
 
 export class MySqlFactory implements DatabaseFactory {
-    makeDatabase(connObj: any): BaseDatabase {
+    makeDatabase(connObj: ConnObj): BaseDatabase {
         return new MySql(connObj);
     }
 }
