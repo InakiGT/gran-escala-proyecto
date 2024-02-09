@@ -40,7 +40,7 @@ export default class UserStrategy implements ServiceStrategy {
 
     async Update(id: number, obj: UpdateUser) {
         try {
-            const data = await this.db.dbConn.query('UPDATE users SET username = ?, password = ?, imgUrl = ? WHERE id = ?', [ id, obj.username, obj.password, obj.username ]);
+            const data = await this.db.dbConn.query('UPDATE users SET username = ?, password = ?, imgUrl = ? WHERE id = ?', [ obj.username, obj.password, obj.username, id ]);
             return data;
         } catch(err) {
             throw new Error(`Error en la actualización: ${err}`);
