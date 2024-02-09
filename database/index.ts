@@ -1,4 +1,4 @@
-import { Connection, createConnection } from 'mysql';
+import { Connection } from 'mysql';
 import { Client } from 'pg';
 import { MySqlFactory } from './mysql';
 import { PostgresFactory } from './pg';
@@ -15,13 +15,6 @@ export class Database {
         password: string, 
         port: number
     ) {
-        const connObj = {
-            user,
-            host,
-            database,
-            password,
-            port,
-        }
 
         const factories = {
             mysql: MySqlFactory,
@@ -30,7 +23,13 @@ export class Database {
             
         const Factory = factories[type];
         const dbFact = new Factory();
-        const db = dbFact.makeDatabase(connObj);
+        const db = dbFact.makeDatabase({
+            user,
+            host,
+            database,
+            password,
+            port,
+        });
         this.dbConn = db.ConnectDB();
     }
 
