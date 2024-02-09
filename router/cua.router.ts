@@ -4,7 +4,7 @@ const router: Router = Router();
 
 router.get('/', (req, res) => {
     try {
-
+        
     } catch(err) {
         console.error(err);
     }
