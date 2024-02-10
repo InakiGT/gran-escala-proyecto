@@ -5,18 +5,22 @@ import { ConnObj } from '../models/ConnObj';
 
 
 export default class UserStrategy implements ServiceStrategy {
-    private db: Database;
+    private db: Database | null;
 
     constructor(conObj: ConnObj) {
-        this.db = Database.getInstance(conObj);
+        this.db = null;
+        this.initializeAsync(conObj);
+    }
+
+    async initializeAsync(conObj: ConnObj) {
+        this.db = await Database.getInstance(conObj);
     }
 
     async Get() {
         try {
-            await this.db.dbConn.connect();
-            const data = await this.db.dbConn.query('SELECT * FROM users');
+            const data = await this.db?.dbConn.query('SELECT * FROM users');
 
-            return data.rows;
+            return data?.rows;
         } catch(err) {
             throw new Error(`Error en la consulta: ${err}`);
         }
@@ -24,10 +28,9 @@ export default class UserStrategy implements ServiceStrategy {
     
     async GetById(id: number) {
         try {
-            await this.db.dbConn.connect();
-            const data = await this.db.dbConn.query('SELECT * FROM users WHERE id = $1', [ id ]);
+            const data = await this.db?.dbConn.query('SELECT * FROM users WHERE id = $1', [ id ]);
 
-            return data.rows;
+            return data?.rows;
         } catch(err) {
             throw new Error(`Error en la consulta: ${err}`);
         }
@@ -35,10 +38,9 @@ export default class UserStrategy implements ServiceStrategy {
     
     async GetByUsername(username: string) {
         try {
-            await this.db.dbConn.connect();
-            const data = await this.db.dbConn.query('SELECT * FROM users WHERE username = $1', [ username ]);
+            const data = await this.db?.dbConn.query('SELECT * FROM users WHERE username = $1', [ username ]);
 
-            return data.rows;
+            return data?.rows;
         } catch(err) {
             throw new Error(`Error en la consulta: ${err}`);
         }
@@ -46,10 +48,9 @@ export default class UserStrategy implements ServiceStrategy {
 
     async Insert(obj: CreateUser) {
         try {
-            await this.db.dbConn.connect();
-            const data = await this.db.dbConn.query('INSERT INTO users (username, password, imgUrl) VALUES ($1, $2, $3)', [ obj.username, obj.password, obj.username ]);
+            const data = await this.db?.dbConn.query('INSERT INTO users (username, password, imgUrl) VALUES ($1, $2, $3)', [ obj.username, obj.password, obj.username ]);
             
-            return data.rows;
+            return data?.rows;
         } catch(err) {
             throw new Error(`Error en la inserción: ${err}`);
         }
@@ -57,10 +58,9 @@ export default class UserStrategy implements ServiceStrategy {
 
     async Update(id: number, obj: UpdateUser) {
         try {
-            await this.db.dbConn.connect();
-            const data = await this.db.dbConn.query('UPDATE users SET username = $1, password = $2, imgUrl = $3 WHERE id = $4', [ obj.username, obj.password, obj.username, id ]);
+            const data = await this.db?.dbConn.query('UPDATE users SET username = $1, password = $2, imgUrl = $3 WHERE id = $4', [ obj.username, obj.password, obj.username, id ]);
             
-            return data.rows;
+            return data?.rows;
         } catch(err) {
             throw new Error(`Error en la actualización: ${err}`);
         }
@@ -68,8 +68,7 @@ export default class UserStrategy implements ServiceStrategy {
 
     async Delete(id: number) {
         try {
-            await this.db.dbConn.connect();
-            await this.db.dbConn.query('DELETE FROM users WHERE id = $1', [ id ]);
+            await this.db?.dbConn.query('DELETE FROM users WHERE id = $1', [ id ]);
             
             return;
         } catch(err) {

@@ -4,18 +4,23 @@ import { CreateCua, UpdateCua } from '../models/Cua';
 import { ServiceStrategy } from './service.strategy';
 
 export default class CuaStrategy implements ServiceStrategy {
-    private db: Database;
+    private db: Database | null;
 
-    constructor(conObj: ConnObj) {
-        this.db = Database.getInstance(conObj);
+    constructor(connObj: ConnObj) {
+        this.db = null;
+        this.initializeAsync(connObj);
+    }
+
+    async initializeAsync(connObj: ConnObj) {
+        this.db = await Database.getInstance(connObj);
     }
 
     async Get() {
         try {
-            await this.db.dbConn.connect();
-            const data = await this.db.dbConn.query('SELECT * FROM cuas');
+            const data = await this.db?.dbConn.query('SELECT * FROM cuas');
 
-            return data;
+
+            return data?.rows;
         } catch(err) {
             throw new Error(`Error en la consulta: ${err}`);
         }
@@ -23,10 +28,10 @@ export default class CuaStrategy implements ServiceStrategy {
 
     async GetById(id: number) {
         try {
-            await this.db.dbConn.connect();
-            const data = await this.db.dbConn.query('SELECT * FROM cuas WHERE id = $1', [ id ]);
+            const data = await this.db?.dbConn.query('SELECT * FROM cuas WHERE id = $1', [ id ]);
 
-            return data.rows;
+
+            return data?.rows;
         } catch(err) {
             throw new Error(`Error en la consulta: ${err}`);
         }
@@ -34,10 +39,9 @@ export default class CuaStrategy implements ServiceStrategy {
 
     async Insert(obj: CreateCua) {
         try {
-            await this.db.dbConn.connect();
-            const data = await this.db.dbConn.query('INSERT INTO cuas (title, content, author, imageUrl) VALUES ($1, $2, $3, $4)', [ obj.title, obj.content, obj.author, obj.imgUrl ]);
+            const data = await this.db?.dbConn.query('INSERT INTO cuas (title, content, author, imageUrl) VALUES ($1, $2, $3, $4)', [ obj.title, obj.content, obj.author, obj.imgUrl ]);
 
-            return data;
+            return data?.rows;
         } catch(err) {
             throw new Error(`Error en la consulta: ${err}`);
         }
@@ -45,11 +49,10 @@ export default class CuaStrategy implements ServiceStrategy {
 
     async Update(id: number, obj: UpdateCua) {
         try {
-            await this.db.dbConn.connect();
-            const tmp = (await this.db.dbConn.query('SELECT author FROM cuas WHERE id = $1', [ id ])).rows;
+            const tmp = (await this.db?.dbConn.query('SELECT author FROM cuas WHERE id = $1', [ id ]))?.rows;
 
-            if (obj.author == tmp[0].author) {
-                const data = await this.db.dbConn.query('UPDATE cuas SET title = $1, content = $2, imageUrl = $3 WHERE id = $4', [ obj.title, obj.content, obj.imgUrl, id ]);
+            if (tmp !== undefined && obj.author == tmp[0].author) {
+                const data = await this.db?.dbConn.query('UPDATE cuas SET title = $1, content = $2, imageUrl = $3 WHERE id = $4', [ obj.title, obj.content, obj.imgUrl, id ]);
                 return data;
             }
 
@@ -61,11 +64,10 @@ export default class CuaStrategy implements ServiceStrategy {
 
     async Delete(id: number, userId: number) {
         try {
-            await this.db.dbConn.connect();
-            const tmp = (await this.db.dbConn.query('SELECT author FROM cuas WHERE id = $1', [ id ])).rows;
+            const tmp = (await this.db?.dbConn.query('SELECT author FROM cuas WHERE id = $1', [ id ]))?.rows;
 
-            if (userId == tmp[0].author) {
-                const data = await this.db.dbConn.query('DELETE FROM cuas WHERE id = $1', [ id] );
+            if (tmp !== undefined && userId == tmp[0].author) {
+                const data = await this.db?.dbConn.query('DELETE FROM cuas WHERE id = $1', [ id] );
                 return data;
             }
 
