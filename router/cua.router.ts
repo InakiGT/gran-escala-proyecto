@@ -6,11 +6,11 @@ import { CreateCua, UpdateCua } from '../models/Cua';
 
 const router: Router = Router();
 const cuaStrategy = new CuaStrategy({
-    user: 'cua',
-    password: '',
-    port: 1234,
-    host: '',
-    database: '',
+    user: 'mini',
+    password: 'pass',
+    port: 5432,
+    host: 'localhost',
+    database: 'mini-x',
 });
 const service = new Service(cuaStrategy);
 

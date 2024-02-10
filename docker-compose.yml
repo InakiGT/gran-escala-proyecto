@@ -1,10 +1,15 @@
-version: "3.7"
+version: '3.7'
 
 services:
-  mysql:
-    image: "mysql:latest"
+  db:
+    image: postgres
+    restart: always
     environment:
-      -
+      POSTGRES_USER: mini
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: mini-x
     volumes:
-      - 
+      - ./postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
   

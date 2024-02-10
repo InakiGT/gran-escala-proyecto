@@ -5,11 +5,11 @@ import { CreateUser, UpdateUser } from "../models/User";
 
 const router: Router = Router();
 const userStrategy = new UserStrategy({
-    user: 'cua',
-    password: '',
-    port: 1234,
-    host: '',
-    database: '',
+    user: 'mini',
+    password: 'pass',
+    port: 5432,
+    host: 'localhost',
+    database: 'mini-x',
 });
 const service = new Service(userStrategy);
 

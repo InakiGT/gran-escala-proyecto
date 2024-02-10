@@ -6,5 +6,5 @@ export interface ServiceStrategy {
     GetById(id: number): any;
     Insert(obj: CreateCua | CreateUser): any;
     Update(id: number, obj: UpdateCua | UpdateUser): any;
-    Delete(id: number): any;
+    Delete(id: number, userId?: number): any;
 }

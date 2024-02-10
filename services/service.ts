@@ -25,7 +25,7 @@ export class Service {
         return this.strategy.Update(id, obj);
     }
 
-    async Delete(id: number) {
-        return this.strategy.Delete(id);
+    async Delete(id: number, userId?: number) {
+        return this.strategy.Delete(id, userId);
     }
 }

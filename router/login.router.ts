@@ -8,14 +8,14 @@ const service = new Login();
 router.post('/', async (req, res) => {
     try {
         const { username, password } = req.body;
-
         const jwt = await service.Login(username, password);
         
-        res.json(200).json({
+        res.status(200).json({
             jwt,
         });
     } catch(err) {
-        res.status(405).json({  });
+        console.error(err);
+        res.status(405).json({ msg: 'Unhauthorized' });
     }
 });
 

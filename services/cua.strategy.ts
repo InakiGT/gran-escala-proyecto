@@ -12,7 +12,9 @@ export default class CuaStrategy implements ServiceStrategy {
 
     async Get() {
         try {
+            await this.db.dbConn.connect();
             const data = await this.db.dbConn.query('SELECT * FROM cuas');
+
             return data;
         } catch(err) {
             throw new Error(`Error en la consulta: ${err}`);
@@ -21,8 +23,10 @@ export default class CuaStrategy implements ServiceStrategy {
 
     async GetById(id: number) {
         try {
-            const data = await this.db.dbConn.query('SELECT * FROM cuas WHERE id = ?', [ id ]);
-            return data;
+            await this.db.dbConn.connect();
+            const data = await this.db.dbConn.query('SELECT * FROM cuas WHERE id = $1', [ id ]);
+
+            return data.rows;
         } catch(err) {
             throw new Error(`Error en la consulta: ${err}`);
         }
@@ -30,7 +34,9 @@ export default class CuaStrategy implements ServiceStrategy {
 
     async Insert(obj: CreateCua) {
         try {
-            const data = await this.db.dbConn.query('INSERT INTO cuas (title, content, author, imageUrl) VALUES (?, ?, ?, ?)', [ obj.title, obj.content, obj.author, obj.imgUrl ]);
+            await this.db.dbConn.connect();
+            const data = await this.db.dbConn.query('INSERT INTO cuas (title, content, author, imageUrl) VALUES ($1, $2, $3, $4)', [ obj.title, obj.content, obj.author, obj.imgUrl ]);
+
             return data;
         } catch(err) {
             throw new Error(`Error en la consulta: ${err}`);
@@ -39,17 +45,31 @@ export default class CuaStrategy implements ServiceStrategy {
 
     async Update(id: number, obj: UpdateCua) {
         try {
-            const data = await this.db.dbConn.query('UPDATE cuas SET title = ?, content = ?, imageUrl = ? WHERE id = ? ', [ obj.title, obj.content, obj.imgUrl, id ]);
-            return data;
+            await this.db.dbConn.connect();
+            const tmp = (await this.db.dbConn.query('SELECT author FROM cuas WHERE id = $1', [ id ])).rows;
+
+            if (obj.author == tmp[0].author) {
+                const data = await this.db.dbConn.query('UPDATE cuas SET title = $1, content = $2, imageUrl = $3 WHERE id = $4', [ obj.title, obj.content, obj.imgUrl, id ]);
+                return data;
+            }
+
+            return null;
         } catch(err) {
             throw new Error(`Error en la consulta: ${err}`);
         }
     }
 
-    async Delete(id: number) {
+    async Delete(id: number, userId: number) {
         try {
-            const data = await this.db.dbConn.query('DELETE FROM cuas WHERE id = ?', [ id] );
-            return data;
+            await this.db.dbConn.connect();
+            const tmp = (await this.db.dbConn.query('SELECT author FROM cuas WHERE id = $1', [ id ])).rows;
+
+            if (userId == tmp[0].author) {
+                const data = await this.db.dbConn.query('DELETE FROM cuas WHERE id = $1', [ id] );
+                return data;
+            }
+
+            return null;
         } catch(err) {
             throw new Error(`Error en la consulta: ${err}`);
         }

@@ -6,18 +6,18 @@ export default class Login {
 
     constructor() {
         this.UserService = new UserStrategy({
-            user: 'cua',
-            password: '',
-            port: 1234,
-            host: '',
-            database: '',
+            user: 'mini',
+            password: 'pass',
+            port: 5432,
+            host: 'localhost',
+            database: 'mini-x',
         });
     }
 
     async Login(username: string, password: string) {
         const data = await this.UserService.GetByUsername(username);
         const pass = data[0].password;
-
+        
         if (pass == password) {
             return jwt.sign(username, 'secret');
         } else {
