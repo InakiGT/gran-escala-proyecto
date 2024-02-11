@@ -39,7 +39,7 @@ export default class CuaStrategy implements ServiceStrategy {
 
     async Insert(obj: CreateCua) {
         try {
-            const data = await this.db?.dbConn.query('INSERT INTO cuas (title, content, author, imageUrl) VALUES ($1, $2, $3, $4)', [ obj.title, obj.content, obj.author, obj.imgUrl ]);
+            const data = await this.db?.dbConn.query('INSERT INTO cuas (title, content, author, imgurl) VALUES ($1, $2, $3, $4)', [ obj.title, obj.content, obj.author, obj.imgUrl ]);
 
             return data?.rows;
         } catch(err) {
@@ -52,7 +52,7 @@ export default class CuaStrategy implements ServiceStrategy {
             const tmp = (await this.db?.dbConn.query('SELECT author FROM cuas WHERE id = $1', [ id ]))?.rows;
 
             if (tmp !== undefined && obj.author == tmp[0].author) {
-                const data = await this.db?.dbConn.query('UPDATE cuas SET title = $1, content = $2, imageUrl = $3 WHERE id = $4', [ obj.title, obj.content, obj.imgUrl, id ]);
+                const data = await this.db?.dbConn.query('UPDATE cuas SET title = $1, content = $2, imgurl = $3 WHERE id = $4', [ obj.title, obj.content, obj.imgUrl, id ]);
                 return data;
             }
 
@@ -65,8 +65,7 @@ export default class CuaStrategy implements ServiceStrategy {
     async Delete(id: number, userId: number) {
         try {
             const tmp = (await this.db?.dbConn.query('SELECT author FROM cuas WHERE id = $1', [ id ]))?.rows;
-
-            if (tmp !== undefined && userId == tmp[0].author) {
+            if (tmp !== undefined && userId === parseInt(tmp[0].author)) {
                 const data = await this.db?.dbConn.query('DELETE FROM cuas WHERE id = $1', [ id] );
                 return data;
             }

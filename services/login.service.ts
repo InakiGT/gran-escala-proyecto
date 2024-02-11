@@ -18,8 +18,8 @@ export default class Login {
         const data = await this.UserService.GetByUsername(username);
         const pass = data ? data[0].password : null;
         
-        if (pass == password) {
-            return jwt.sign(username, 'secret');
+        if (data !== undefined && pass == password) {
+            return jwt.sign(data[0].id, 'secret');
         } else {
             throw new Error('No Authorizated');
         }

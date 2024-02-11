@@ -48,7 +48,7 @@ export default class UserStrategy implements ServiceStrategy {
 
     async Insert(obj: CreateUser) {
         try {
-            const data = await this.db?.dbConn.query('INSERT INTO users (username, password, imgUrl) VALUES ($1, $2, $3)', [ obj.username, obj.password, obj.username ]);
+            const data = await this.db?.dbConn.query('INSERT INTO users (username, password, imageurl) VALUES ($1, $2, $3)', [ obj.username, obj.password, obj.imgUrl ]);
             
             return data?.rows;
         } catch(err) {
