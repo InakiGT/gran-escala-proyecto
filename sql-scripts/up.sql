@@ -14,6 +14,18 @@ CREATE TABLE cuas (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE logs (
+    log_id INT AUTO_INCREMENT PRIMARY KEY,
+    `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+    severity ENUM('INFO', 'WARNING', 'ERROR') NOT NULL,
+    message TEXT NOT NULL,
+    source VARCHAR(255),
+    user_id INT,
+    INDEX(`timestamp`),
+    INDEX(severity)
+);
+
+
 INSERT INTO users (username, password, imageUrl) VALUES
 	('Munikzen', 'qwejniq1','https://i.pinimg.com/736x/a6/ed/f9/a6edf992b1a9ffe732f1c53e06eef91c.jpg'),
     ('DemonInsideS','rqqgeiptyg465', 'https://static.wikia.nocookie.net/villains/images/e/e7/Demonic.jpg/revision/latest?cb=20210611125546'),

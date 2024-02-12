@@ -4,5 +4,5 @@ export interface ConnObj {
     host: string;
     database: string;
     password: string;
-    port: number;
+    port?: number;
 }

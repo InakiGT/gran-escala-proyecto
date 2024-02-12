@@ -3,7 +3,6 @@ version: '3.7'
 services:
   db:
     image: postgres
-    restart: always
     environment:
       POSTGRES_USER: mini
       POSTGRES_PASSWORD: pass
@@ -12,4 +11,13 @@ services:
       - ./postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-  
+
+  logs:
+    image: mysql:8.0.36
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: logs
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"

@@ -1,6 +1,6 @@
-import { Connection, createConnection } from "mysql";
-import { BaseDatabase, DatabaseFactory } from "./database.factory";
-import { ConnObj } from "../models/ConnObj";
+import { Connection, createConnection } from 'mysql2';
+import { BaseDatabase, DatabaseFactory } from './database.factory';
+import { ConnObj } from '../models/ConnObj';
 
 class MySql implements BaseDatabase {
     constructor(private connObj: ConnObj) {}
