@@ -31,7 +31,6 @@ export class LogsDatabase {
             }
         });
         
-        this.connection.end();
         return {
             status,
             err,
