@@ -10,3 +10,10 @@ export interface UpdateUser {
     password?: string;
     imgUrl?: string;
 }
+
+export interface User {
+    id: number,
+    username: string;
+    password: string;
+    imgUrl?: string;
+}

@@ -21,7 +21,7 @@ export default class Login {
         if (data !== undefined && pass == password) {
             return jwt.sign(data[0].id, 'secret');
         } else {
-            throw new Error('No Authorizated');
+            throw new Error('Unauthorized');
         }
     }
 }
