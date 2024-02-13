@@ -47,7 +47,7 @@ export default class CuaStrategy implements ServiceStrategy {
     async Insert(obj: CreateCua) {
         try {
             const data = await this.db?.dbConn.query('INSERT INTO cuas (title, content, author, imgurl) VALUES ($1, $2, $3, $4)', [ obj.title, obj.content, obj.author, obj.imgUrl ]);
-            this.logs?.CreateLog(`[CREATED] Cuawas created by user with id: ${obj.author}`);
+            this.logs?.CreateLog(`[CREATED] Cuawas created by user with id: ${obj.author} with data: { title: ${obj.title}, content: ${obj.content}, author: ${obj.author}, imgurl: ${obj.imgUrl} }`);
 
             return data?.rows;
         } catch(err) {
@@ -61,7 +61,7 @@ export default class CuaStrategy implements ServiceStrategy {
 
             if (tmp !== undefined && obj.author == tmp[0].author) {
                 const data = await this.db?.dbConn.query('UPDATE cuas SET title = $1, content = $2, imgurl = $3 WHERE id = $4', [ obj.title, obj.content, obj.imgUrl, id ]);
-                this.logs?.CreateLog(`[UPDATED] Cua with id: ${id} was updated by user with id: ${tmp[0].author}`);
+                this.logs?.CreateLog(`[UPDATED] Cua with id: ${id} was updated by user with id: ${tmp[0].author}  with data: { title: ${obj.title}, content: ${obj.content}, author: ${obj.author}, imgurl: ${obj.imgUrl} }`);
 
                 return data;
             }
