@@ -32,23 +32,29 @@ describe('Test for LogIn service', () => {
 
     describe('Test for Login method with correct data', () => {
         test('Should return a JWT', async () => {
+            // Arrange
             const username = 'testUser';
             const password = 'pass';
 
+            // Act
             const jwt = await service.Login(username, password);
 
+            // Assert
             expect(jwt).not.toEqual("");
         });
     });
 
     describe('Test for Login method with wrong password', () => {
         test('Should return an Error', async () => {
+            // Arrange
             const username = 'testUser';
             const password = 'wring';
 
             try {
+                // Act
                 await service.Login(username, password)
             } catch(err) {
+                // Assert
                 expect((err as Error).message).toBe('Unauthorized');
             }
         });
@@ -56,12 +62,15 @@ describe('Test for LogIn service', () => {
 
     describe('Test for Login method with wrong username', () => {
         test('Should return an Error', async () => {
+            // Arrange
             const username = 'user';
             const password = 'pass';
 
             try {
+                // Act
                 await service.Login(username, password)
             } catch(err) {
+                // Assert
                 expect((err as Error).message).toBe('Unauthorized');
             }
         });
