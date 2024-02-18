@@ -18,7 +18,6 @@ class UserStrategyStub {
         const data = fakeUsers.find(user => user.username === username);
         return data ? [ data ] : [ { username: '', password: '' } ];
     }  
-
 }
 
 jest.mock('../services/user.strategy.ts', () => jest.fn().mockImplementation(() => new UserStrategyStub()));
@@ -52,7 +51,7 @@ describe('Test for LogIn service', () => {
 
             try {
                 // Act
-                await service.Login(username, password)
+                await service.Login(username, password);
             } catch(err) {
                 // Assert
                 expect((err as Error).message).toBe('Unauthorized');
